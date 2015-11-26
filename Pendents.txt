@@ -1,0 +1,8 @@
+Blocks		Assigned to
+-------		-----------
+1		Juli
+2		Juli
+3		Juli
+4		Opcional
+5		Xavi
+6		Xavi
