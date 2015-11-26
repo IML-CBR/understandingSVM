@@ -8,7 +8,14 @@ cd(fileparts(tmp.Filename));
 
 
 %% QUESTION 1 - Juli
-data = load('../Data/example_dataset_1');
+% 1)
+DataSet = load('../Data/example_dataset_1');
+labels = DataSet.labels;
+data = Dataset.data;
+% 2)
+[ model, other_values ] = train_linearSVMhard( labels, data, params );
+% 3)
+% 4)
 
 %% QUESTION 2 - Juli
 
