@@ -13,37 +13,32 @@ Dataset = load('../Data/example_dataset_1');
 labels = Dataset.labels;
 data = Dataset.data';
 % 2)
- [model,dist] = train_linearSVMhard( labels, data );
+ [w,d] = train_linearSVMhard( labels, data );
 % 3)
 minrange = min(data,[],1);
 maxrange = max(data,[],1);
-range = [minrange(1),maxrange(1),minrange(2),maxrange(2)];
-fun = @(x) ((model(1)+model(2)*x)/(-model(3)));
-funMar1 = @(x) ((1+model(1)+model(2)*x)/(-model(3)));
-funMar2 = @(x) ((-1+model(1)+model(2)*x)/(-model(3)));
+range = [minrange(1,max(data,[],1),min(data,[],2),max(data,[],2)];
+w(1)
+w(2)
+w(3)
+fun = @(x) ((w(1)+w(2)*x)/(-w(3)));
 positive = data(find(labels > 0),:);
 negative = data(find(labels < 0),:);
 figure;
 
 scatter(positive(:,1),positive(:,2),[],'b','+');
+% linkaxes(axes_handles,'xy');
 hold on
 scatter(negative(:,1),negative(:,2),[],'r','o');
 hold on
 fplot(fun,range);
-hold on
-fplot(funMar1,range);
-hold on
-fplot(funMar2,range);
 
-% 4)
-suports = data(find(dist==1),:);
-hold on
-scatter(suports(:,1),suports(:,2),200,'g','o','LineWidth',1.5);
 
 title('Analytical solution')
 xlabel('x1')
 ylabel('x2')
 hold off
+% 4)
 
 %% QUESTION 2 - Juli
 
