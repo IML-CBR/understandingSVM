@@ -1,12 +1,10 @@
 %% Reset all
 clear all;
 close all;
+clc;
 %% Move to working directory
 tmp = matlab.desktop.editor.getActive;
 cd(fileparts(tmp.Filename));
-%% Load Data
-
-
 %% QUESTION 1 - Juli
 % 1)
 Dataset = load('../Data/example_dataset_1');
@@ -46,6 +44,42 @@ ylabel('x2')
 hold off
 
 %% QUESTION 2 - Juli
+% 1)
+Dataset = load('../Data/example_dataset_1');
+labels = Dataset.labels;
+data = Dataset.data';
+% 2)
+lambda = 0;
+[model,dist] = train_linearSVMsoft( labels, data, lambda );
+name = strcat('SVM soft with lambda ',num2str(lambda));
+plotSVMsoft( data, labels, model, dist, name );
+
+% 3)
+%Created with the toy_datasetCreator function
+Dataset = load('../Data/non_separable_dataset_1');
+labels = Dataset.labels;
+data = Dataset.data';
+
+lambda = 0;
+[model,dist] = train_linearSVMsoft( labels, data, lambda );
+name = strcat('SVM soft with lambda ',num2str(lambda));
+plotSVMsoft( data, labels, model, dist, name );
+
+% 4)
+lambda = 0.01;
+[model,dist] = train_linearSVMsoft( labels, data, lambda );
+name = strcat('SVM soft with lambda ',num2str(lambda));
+plotSVMsoft( data, labels, model, dist, name );
+
+lambda = 1;
+[model,dist] = train_linearSVMsoft( labels, data, lambda );
+name = strcat('SVM soft with lambda ',num2str(lambda));
+plotSVMsoft( data, labels, model, dist, name );
+
+lambda = 100;
+[model,dist] = train_linearSVMsoft( labels, data, lambda );
+name = strcat('SVM soft with lambda ',num2str(lambda));
+plotSVMsoft( data, labels, model, dist, name );
 
 %% QUESTION 3 - Juli
 

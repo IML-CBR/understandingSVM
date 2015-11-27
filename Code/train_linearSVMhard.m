@@ -1,9 +1,9 @@
 function [ w , d ] = train_linearSVMhard( labels, data )
-% TODO
+% Funtion for training a SVM that dose not consider errors in the cost
+% function
     m = size(data,1);
     n = size(data,2)+1;
     A = [ones(m,1),data];
-%     d = zeros(1,20);
     cvx_begin 
         variable w(n)
         minimize( norm( w, 2 )/2 )

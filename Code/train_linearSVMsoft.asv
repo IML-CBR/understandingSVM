@@ -6,11 +6,13 @@ function [ w , d ] = train_linearSVMsoft( labels, data, lambda )
     A = [ones(m,1),data];
     cvx_begin 
         variable w(n)
+        minimize( norm( w, 2 )/2 + lambda*(sum(max(0, 1 - labels*(A*w)))) )
         d = A*w
         for i=1:m
             d(i) = (d(i)*labels(i)).^0.5
         end
-        minimize( norm( w, 2 )/2 + lambda*(sum(max(0, 1 - d))) )
+%         subject to
+%             d >= 1-
     cvx_end
     for i=1:m
         d(i) = roundx(d(i),5,'round');
