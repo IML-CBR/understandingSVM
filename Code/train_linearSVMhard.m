@@ -3,7 +3,7 @@ function [ w , d ] = train_linearSVMhard( labels, data )
 % function
     m = size(data,1);
     n = size(data,2)+1;
-    A = [ones(m,1),data];
+    A = [data,ones(m,1)];
     cvx_begin 
         variable w(n)
         minimize( norm( w, 2 )/2 )
