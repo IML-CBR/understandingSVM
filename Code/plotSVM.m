@@ -1,4 +1,4 @@
-function plotSVMsoft( data, labels, model, name )
+function plotSVM( data, labels, model, name )
 % Function that plots the SVM model generated for the training data
     figure;
     linewidth = 0.5;
@@ -18,12 +18,11 @@ function plotSVMsoft( data, labels, model, name )
     set(graph(2),'LineWidth',linewidth);
     set(graph(2),'Color',[0.5 0 0]);
     hold on;
-
-    distances = ([data,ones(size(data,1),1)]*model).*labels;
-    suports = data(find(arrayfun(@(x) roundx(x,5,'round'),...
-        (distances))==1),:);
-    errors = data(find(arrayfun(@(x) roundx(x,5,'round'),...
-        ([data,ones(size(data,1),1)]*model).*labels)<1),:);
+    
+    % Distance is calculated as r = (w'*X_i + b)/norm(w,2)
+    distances = ([data,ones(size(data,1),1)]*model).*labels;%/norm(model(1:end-1));
+    suports = data(find(arrayfun(@(x) roundx(x,5,'round'),(distances))==1),:);
+    errors = data(find(arrayfun(@(x) roundx(x,5,'round'),(distances))<1),:);
     
     scatter(suports(:,1),suports(:,2),200,'g','o','LineWidth',1.5);
     hold on

@@ -88,6 +88,7 @@ lambda = 10;
 [model,u] = train_linearSVMsoft( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
 plotSVM( data, labels, model, name );
+% 5) and 6)
 u
 % rule for identifying SVs
 distances = ([data,ones(size(data,1),1)]*model).*labels

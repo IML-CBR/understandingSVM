@@ -9,7 +9,7 @@ function [ a, u ] = train_linearSVMsoft( labels, data, lambda )
     cvx_begin
         variables a(n)
         u = max(zeros(m,1),1 - (X*a).*labels);
-        minimize (norm(a,2)/2 + lambda*(ones(1,m)*u))
+        minimize (norm(a(),2)/2 + lambda*(ones(1,m)*u))
     cvx_end
 end
 
