@@ -81,6 +81,9 @@ model = train_linearSVMsoft( labels, data, lambda );
 name = strcat('SVM soft with lambda ',num2str(lambda));
 plotSVMsoft( data, labels, model, name );
 
+% 5)
+% 6)
+
 %% QUESTION 3 - Juli
 
 %% QUESTION 4 - Optional
