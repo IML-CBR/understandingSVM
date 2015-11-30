@@ -19,14 +19,21 @@ function plotSVM( data, labels, model, name )
     set(graph(2),'Color',[0.5 0 0]);
     hold on;
     
-    % Distance is calculated as r = (w'*X_i + b)/norm(w,2)
-    distances = ([data,ones(size(data,1),1)]*model).*labels;%/norm(model(1:end-1));
-    suports = data(find(arrayfun(@(x) roundx(x,5,'round'),(distances))==1),:);
-    errors = data(find(arrayfun(@(x) roundx(x,5,'round'),(distances))<1),:);
+    % Distance is calculated as r = (w'*X_i + b)
+    distances = ([data,ones(size(data,1),1)]*model).*labels;
+    decimals = 5;
+    suports = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))==1),:);
+    while length(suports)>3
+        decimals = decimals + 1;
+        suports = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))==1),:);
+    end
+    errors = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))<1),:);
     
-    scatter(suports(:,1),suports(:,2),200,'g','o','LineWidth',1.5);
-    hold on
+    
     scatter(errors(:,1),errors(:,2),200,'y','o','LineWidth',1.5);
+    hold on
+    scatter(suports(:,1),suports(:,2),200,'g','o','LineWidth',1.5);
+    
     axis tight
     hold on;
     plot(range,w_lim, '-b', range,marg1, '--r', range,marg2, '--r');

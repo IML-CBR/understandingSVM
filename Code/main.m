@@ -33,7 +33,7 @@ Dataset = load('../Data/non_separable_dataset_3');
 labels = Dataset.labels;
 data = Dataset.data';
 
-lambda = 0;
+lambda = 100;
 model = train_linearSVMsoft( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
 plotSVM( data, labels, model, name );
