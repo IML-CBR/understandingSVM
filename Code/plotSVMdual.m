@@ -1,4 +1,4 @@
-function plotSVM( data, labels, model, name )
+function plotSVMdual( data, labels, model, name, v )
 % Function that plots the SVM model generated for the training data
     figure;
     linewidth = 0.5;
@@ -27,7 +27,7 @@ function plotSVM( data, labels, model, name )
         decimals = decimals + 1;
         suports = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))==1),:);
     end
-    errors = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))<1),:);
+    errors = data(find(distances < 1),:);
     
     
     scatter(errors(:,1),errors(:,2),200,'y','o','LineWidth',1.5);
