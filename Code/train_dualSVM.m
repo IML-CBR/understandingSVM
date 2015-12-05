@@ -1,4 +1,4 @@
-function [  w, d, v] = train_dualSVM( labels, data, lambda )
+function [  w, v ] = train_dualSVM( labels, data, lambda )
 % Funtion for training a SVM that dose consider errors in the cost
 % function, with the dual algorithm solution
     m = size(data,1);
@@ -28,10 +28,7 @@ function [  w, d, v] = train_dualSVM( labels, data, lambda )
     v(find(v <= lambda/10^(decimals))) = 0;
     v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
     w = (v'.*Y'*X')';
-    SVsIndexes = find((v > 0)&(v < lambda));
-    SVs = X(:,SVsIndexes)';
-    SVlabels = Y(SVsIndexes);
-    SVcnt = size(SVsIndexes,1);
+    
 %     auxB = 0;
 %     for i=1:1:size(SVs,1)
 %         auxB = auxB + 
@@ -46,12 +43,12 @@ function [  w, d, v] = train_dualSVM( labels, data, lambda )
 %         b = -(SVs(i,:)*w - SVlabels(i)) + b;
 %     end
 %     b = b/size(SVlabels,1);
-sum(((w'*SVs')'-SVlabels))/3
+% sum(((w'*SVs')'-SVlabels))/3
 %     b = mean([SVs,-SVlabels]*[w;1],1);
-d = (SVlabels'.*(w'*SVs'))
+    
 %     a'xi - yi = b
 % decimals = 5;
-    sum((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)
+%     sum((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)
 %     w(end+1) = b;
 end
 
