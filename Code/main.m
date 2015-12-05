@@ -101,24 +101,24 @@ labels = Dataset.labels;
 data = Dataset.data';
 % 2) and 3)
 lambda = 0.01;
-model = train_dualSVM( labels, data, lambda );
+[model, d] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVM( data, labels, model, name );
+plotSVMdual( data, labels, model, name, d );
 
 lambda = 1;
-model = train_dualSVM( labels, data, lambda );
+[model, d] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVM( data, labels, model, name );
+plotSVMdual( data, labels, model, name, d );
 
 lambda = 100;
-[model,v] = train_dualSVM( labels, data, lambda );
+[model, d] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVM( data, labels, model, name );
+plotSVMdual( data, labels, model, name, d );
 
 lambda = 10000;
-[model,v] = train_dualSVM( labels, data, lambda );
+[model, d] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVM( data, labels, model, name );
+plotSVMdual( data, labels, model, name, d );
 
 %% QUESTION 5 - Xavi
 

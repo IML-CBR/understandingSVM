@@ -1,4 +1,4 @@
-function plotSVMdual( data, labels, model, name, v )
+function plotSVMdual( data, labels, model, name, d )
 % Function that plots the SVM model generated for the training data
     figure;
     linewidth = 0.5;
@@ -6,9 +6,9 @@ function plotSVMdual( data, labels, model, name, v )
     range_max = max(data(:,1));
     offset = abs(range_max-range_min)/10;
     range = linspace(range_min-offset,range_max+offset,100);
-    w_lim = (model(3)+model(1)*range)/(-model(2));
-    marg1 = (model(3)+model(1)*range + 1)/(-model(2));
-    marg2 = (model(3)+model(1)*range - 1)/(-model(2));
+    w_lim = (model(1)*range)/(-model(2));
+    marg1 = (model(1)*range + mean(d))/(-model(2));
+    marg2 = (model(1)*range - mean(d))/(-model(2));
     
     positive = data(find(labels > 0),:);
     negative = data(find(labels < 0),:);
@@ -20,14 +20,15 @@ function plotSVMdual( data, labels, model, name, v )
     hold on;
     
     % Distance is calculated as r = (w'*X_i + b)
-    distances = ([data,ones(size(data,1),1)]*model).*labels;
-    decimals = 5;
-    suports = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))==1),:);
-    while length(suports)>3
-        decimals = decimals + 1;
-        suports = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))==1),:);
-    end
-    errors = data(find(distances < 1),:);
+    distances = (data*model).*labels;
+    supIndex = (unique([find(distances==d(1)),find(distances==d(2)),find(distances==d(3))]'))';
+    suports = data(supIndex,:);
+%     while length(suports)>3
+%         decimals = decimals + 1;
+%         suports = data(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))==d),:);
+%     end
+    errIndex = intersect(intersect(find(distances < d(1)),find(distances < d(2))),find(distances < d(3)));
+    errors = data(errIndex,:);
     
     
     scatter(errors(:,1),errors(:,2),200,'y','o','LineWidth',1.5);

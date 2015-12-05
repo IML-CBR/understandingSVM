@@ -1,9 +1,9 @@
-function [  w, v ] = train_dualSVM( labels, data, lambda )
+function [  w, d, v] = train_dualSVM( labels, data, lambda )
 % Funtion for training a SVM that dose consider errors in the cost
 % function, with the dual algorithm solution
     m = size(data,1);
-    n = size(data,2);
-    X = data';
+    n = size(data,2);%+1;
+    X = [data]';%,ones(m,1)]';
     Y = labels;
     cvx_begin
         variables v(m)
@@ -18,14 +18,14 @@ function [  w, v ] = train_dualSVM( labels, data, lambda )
     
     % Fix v values
     finish = 0;
-    decimals = 2;
-    while (lambda/10^decimals > mean(v)/100) && (decimals < 6) && ~finish
+    decimals = 0;
+    while (decimals < 6) && ~finish %&& (lambda/10^decimals > mean(v)/100)
         finish = (size(Y,1) - (sum(v <= lambda/10^decimals)+sum((arrayfun(@(x) roundx(x,decimals,'round'),v) == lambda))) == 3);
         if ~finish decimals = decimals+1; end
     end
     
     
-    v(find(v <= lambda/10^(decimals+2))) = 0;
+    v(find(v <= lambda/10^(decimals))) = 0;
     v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
     w = (v'.*Y'*X')';
     SVsIndexes = find((v > 0)&(v < lambda));
@@ -41,16 +41,17 @@ function [  w, v ] = train_dualSVM( labels, data, lambda )
 % SVs(:,3)=-SVlabels
 % v'*ones(m,1)-(1/2)*ones(1,m)*((v'.*Y')*(v.*Y)*(X')*X)*ones(m,1)
 % v'*ones(m,1)-(1/2)*ones(1,m)*(v'*diag(Y)*X'*X*diag(Y)*v)*ones(m,1)
-b = 0;
+% b = 0;
 %     for i = 1:size(SVlabels,1)
 %         b = -(SVs(i,:)*w - SVlabels(i)) + b;
 %     end
 %     b = b/size(SVlabels,1);
 sum(((w'*SVs')'-SVlabels))/3
-    b = mean([SVs,-SVlabels]*[w;1],1);
+%     b = mean([SVs,-SVlabels]*[w;1],1);
+d = (SVlabels'.*(w'*SVs'))
 %     a'xi - yi = b
 % decimals = 5;
     sum((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)
-    w(end+1) = b;
+%     w(end+1) = b;
 end
 
