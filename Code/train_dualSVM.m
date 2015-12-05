@@ -29,6 +29,12 @@ function [  w, v ] = train_dualSVM( labels, data, lambda )
     v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
     w = (v'.*Y'*X')';
     
+    %     yi(a'xi -b) = d
+    % yi(w'xi -b) = yj(w'xj -b)
+    % yi/yj = 1 if equals
+    % w'xi -b = w'xj -b
+   
+    
 %     auxB = 0;
 %     for i=1:1:size(SVs,1)
 %         auxB = auxB + 
