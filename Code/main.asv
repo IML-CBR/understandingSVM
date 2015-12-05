@@ -123,9 +123,7 @@ plotSVMdual( data, labels, model, name, v, lambda );
 
 % 5) & 6)
 v
-v(find(v > 0))
-% SVs:
-data(find(v > 0),:)
+find(v >= 0)
 
 %% QUESTION 5 - Xavi
 
