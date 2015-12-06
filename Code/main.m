@@ -142,10 +142,10 @@ best_error = Inf;
 for i = 1:length(lambdas)
     lambda = lambdas(i);
     model_5 = train_linearSVMsoft( labels_5, data_5, lambda );
-    distances = ([data_5,ones(size(data_5,1),1)]*model).*labels_5;
+    distances = ([data_5,ones(size(data_5,1),1)]*model_5).*labels_5;
     errors = data_5(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))<1),:);
-    if errors < best_error
-        best_error = errors;
+    if size(errors,1) < best_error
+        best_error = size(errors,1);
         best_model = model_5;
         best_lambda = lambda;
     end
@@ -158,3 +158,4 @@ plotSVM( data_5, labels_5, best_model, name );
 %% QUESTION 6 - Xavi
 
 model_5 = train_linearSVMweighted( labels_5, data_5, lambda );
+plotSVM( data_5, labels_5, model_5, name );
