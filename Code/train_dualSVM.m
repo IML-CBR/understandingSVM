@@ -1,5 +1,5 @@
 function [  w, v ] = train_dualSVM( labels, data, lambda )
-% Funtion for training a SVM that dose consider errors in the cost
+% Function for training a SVM that does consider errors in the cost
 % function, with the dual algorithm solution
     m = size(data,1);
     n = size(data,2);%+1;

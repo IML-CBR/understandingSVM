@@ -128,5 +128,33 @@ v(find(v > 0))
 data(find(v > 0),:)
 
 %% QUESTION 5 - Xavi
+dataset_5 = load('../Data/example_dataset_3');
+data_5 = dataset_5.data';
+labels_5 = dataset_5.labels;
 
+% Num examples each class
+label_pos = sum(labels_5==1)
+label_neg = sum(labels_5==-1)
+
+decimals = 5;
+lambdas = [0.1 0 1 10 100];
+best_error = Inf;
+for i = 1:length(lambdas)
+    lambda = lambdas(i);
+    model_5 = train_linearSVMsoft( labels_5, data_5, lambda );
+    distances = ([data_5,ones(size(data_5,1),1)]*model).*labels_5;
+    errors = data_5(find(arrayfun(@(x) roundx(x,decimals,'round'),(distances))<1),:);
+    if errors < best_error
+        best_error = errors;
+        best_model = model_5;
+        best_lambda = lambda;
+    end
+end
+
+distances = ([data_5,ones(size(data_5,1),1)]*best_model).*labels_5;
+error_labels = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<1);
+plotSVM( data_5, labels_5, best_model, name );
+    
 %% QUESTION 6 - Xavi
+
+model_5 = train_linearSVMweighted( labels_5, data_5, lambda );

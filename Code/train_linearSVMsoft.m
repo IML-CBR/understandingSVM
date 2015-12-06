@@ -1,5 +1,5 @@
 function [ w, u ] = train_linearSVMsoft( labels, data, lambda )
-% Funtion for training a SVM that dose consider errors in the cost
+% Funtion for training a SVM that does consider errors in the cost
 % function
     m = size(data,1);
     n = size(data,2);
