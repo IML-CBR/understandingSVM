@@ -1,14 +1,16 @@
-function [  w, v ] = train_dualSVM( labels, data, lambda )
+function [  model, v ] = train_dualSVM( labels, data, lambda )
 % Function for training a SVM that does consider errors in the cost
 % function, with the dual algorithm solution
     m = size(data,1);
     n = size(data,2);%+1;
     X = [data]';%,ones(m,1)]';
     Y = labels;
+    K = X'*X;
+    tolerance = 1e-4;
     cvx_begin
         variables v(m)
 %         r = (v'*ones(m,1)-(1/2)*sum(sum((v'.*Y')*(v.*Y)*X'*X)))
-        maximise(v'*ones(m,1)-(1/2)*ones(1,m)*(v'*diag(Y)*X'*X*diag(Y)*v)*ones(m,1));%ones -> v
+        maximise(v'*ones(m,1)-(1/2)*ones(1,m)*(v'*diag(Y)*K*diag(Y)*v)*ones(m,1));%ones -> v
 %         maximize(v'*ones(m,1)-(1/2)*ones(1,m)*((v'.*Y')*(v.*Y)*(X')*X)*ones(m,1));
         subject to
             v'*Y == 0;
@@ -17,17 +19,47 @@ function [  w, v ] = train_dualSVM( labels, data, lambda )
     cvx_end
     
     % Fix v values
-    finish = 0;
-    decimals = 0;
-    while (decimals < 6) && ~finish %&& (lambda/10^decimals > mean(v)/100)
-        finish = (size(Y,1) - (sum(v <= lambda/10^decimals)+sum((arrayfun(@(x) roundx(x,decimals,'round'),v) == lambda))) == 3);
-        if ~finish decimals = decimals+1; end
-    end
+%     finish = 0;
+%     decimals = 0;
+%     while (decimals < 6) && ~finish %&& (lambda/10^decimals > mean(v)/100)
+%         finish = (size(Y,1) - (sum(v <= lambda/10^decimals)+sum((arrayfun(@(x) roundx(x,decimals,'round'),v) == lambda))) == 3);
+%         if ~finish decimals = decimals+1; end
+%     end
     
     
-    v(find(v <= lambda/10^(decimals))) = 0;
-    v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
-    w = (v'.*Y'*X')';
+%     v(find(v <= lambda/10^(decimals))) = 0;
+%     v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
+%     w = (v'.*Y'*X')';
+%     
+    
+    model.margin = find(v > tolerance * lambda & v < (1 - tolerance) * lambda) ;
+    model.svs = find(v > tolerance * lambda) ;
+    model.v = v ;
+    model.vy = diag(Y) * v ;
+%     model.K = K;
+
+if ~ isempty(model.margin)
+  % This worsk 99% of the times
+  model.b = mean(Y(model.margin)' - model.vy' * K(:,model.margin)) ;
+
+else
+  % Special cases to deal with the case in which C is very small
+  % and there are no support vectors on the margin
+
+  r = 1 - model.vy' * K * diag(Y) ;
+  act = ismember(1:n, model.svs) ;
+  pos = Y > 0 ;
+
+  maxb = min([+r(pos & act),  -r(~pos & ~act)]) ;
+  minb = max([-r(~pos & act), +r(pos & ~act)]) ;
+  if mean(Y(act)) <= -tolerance
+    model.b = maxb ;
+  elseif mean(Y(act)) > tolerance
+    model.b = minb;
+  else
+    % Any b in the interval is equivalent
+    model.b = mean([minb maxb]) ;
+  end
     
     %     yi(a'xi -b) = d
     % yi(w'xi -b) = yj(w'xj -b)

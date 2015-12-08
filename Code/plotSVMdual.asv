@@ -68,7 +68,7 @@ margin = mean(abs(y_margin));
 y_pred = model.vy(model.svs)' * K_dense;% + model.b;
 % predict
 figure;
-h(1:2) = gscatter(data(:,1),data(:,2),Y,'rb','o+');
+h(1:2) = gscatter(data(:,1),data(:,2),Y,{'r','b'},);
 hold on
 h(3) = plot(data(model.svs,1),...
     data(model.svs,2),'yo','MarkerSize',12, 'linewidth', 0.5);
@@ -84,7 +84,7 @@ set(marg,'color', 'r', 'linestyle', '--', 'linewidth', 0.5) ;
 [~,marg]=contour(x1Grid,x2Grid,reshape(y_pred, size(x1Grid,1),size(x1Grid,2)),[margin margin]);
 set(marg,'color', 'r', 'linestyle', '--', 'linewidth', 0.5) ;
     % Decision boundary
-title(name)
+title('Scatter Diagram with the Decision Boundary')
 legend({'-1','1','Support Vectors','Margin Vectors'},'Location','Best');
 hold off
 

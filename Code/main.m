@@ -107,23 +107,23 @@ data = Dataset.data';
 lambda = 0.01;
 [model, v] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVMdual( data, labels, model, name, v, lambda );
+plotSVMdual( data, labels, model, name );
 
 lambda = 1;
 [model, v] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVMdual( data, labels, model, name, v, lambda );
+plotSVMdual( data, labels, model, name );
 
 lambda = 100;
 [model, v] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVMdual( data, labels, model, name, v, lambda );
+plotSVMdual( data, labels, model, name );
 
 % 4)
 lambda = 10;
 [model, v] = train_dualSVM( labels, data, lambda );
 name = strcat('linear SVM soft with lambda ',num2str(lambda));
-plotSVMdual( data, labels, model, name, v, lambda );
+plotSVMdual( data, labels, model, name );
 
 % 5) & 6)
 v
