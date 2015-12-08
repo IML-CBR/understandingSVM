@@ -155,52 +155,85 @@ for i = 1:length(lambdas)
     errors_svm(i) = size(error_svm,1);
     errors_mis(i) = size(error_mis,1);
     if size(errors_svm,1) < best_error
-        best_error = size(errors_svm,1);
-        best_model = model_5;
-        best_lambda = lambda;
+        best_error_block_5 = size(errors_svm,1);
+        best_model_block_5 = model_5;
+        best_lambda_block_5 = lambda;
     end
 end
 
 
-distances = ([data_5,ones(size(data_5,1),1)]*best_model).*labels_5;
+distances = ([data_5,ones(size(data_5,1),1)]*best_model_block_5).*labels_5;
 error_svm_labels = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<1);
 error_labels = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<0);
-plotSVM( data_5, labels_5, best_model, 'Soft SVM with unbalanced data' );
+plotSVM( data_5, labels_5, best_model_block_5, 'Soft SVM with unbalanced data' );
 
 
 %% QUESTION 6
-dataset_5 = load('../Data/example_dataset_3');
-data_5 = dataset_5.data';
-labels_5 = dataset_5.labels;
+dataset_6 = load('../Data/example_dataset_3');
+data_6 = dataset_6.data';
+labels_6 = dataset_6.labels;
 
 % Num examples each class
-num_pos = sum(labels_5==1)
-num_neg = sum(labels_5==-1)
+num_pos = sum(labels_6==1)
+num_neg = sum(labels_6==-1)
 
 w1 = 1-num_pos/(num_pos+num_neg)
 w2 = 1-w1
 
-decimals = 5;
-lambdas = [1 10 100 1000 10000];
-best_error = Inf;
-errors_svm = zeros(1,length(lambdas));
-errors_mis = zeros(1,length(lambdas));
-for i = 1:length(lambdas)
-    lambda = lambdas(i);
-    model_5_w = train_linearSVMweighted( labels_5, data_5, lambda, w1,w2 );
-    distances = ([data_5,ones(size(data_5,1),1)]*model_5_w).*labels_5;
-    error_svm = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<1);
-    error_mis = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<0);
-    errors_svm(i) = size(error_svm,1);
-    errors_mis(i) = size(error_mis,1);
-    if size(error_svm_labels,1) < best_error
-        best_error = size(error_svm_labels,1);
-        best_model = model_5_w;
-        best_lambda = lambda;
+decimals_6 = 5;
+lambdas_6 = [1 10 100 1000 10000];
+best_error_6 = Inf;
+errors_svm_6 = zeros(1,length(lambdas_6));
+errors_mis_6 = zeros(1,length(lambdas_6));
+for i = 1:length(lambdas_6)
+    lambda = lambdas_6(i);
+    model_6 = train_linearSVMweighted( labels_6, data_6, lambda, w1,w2 );
+    distances = ([data_6,ones(size(data_6,1),1)]*model_6).*labels_6;
+    error_svm = labels_6(arrayfun(@(x) roundx(x,decimals_6,'round'),distances)<1);
+    error_mis = labels_6(arrayfun(@(x) roundx(x,decimals_6,'round'),distances)<0);
+    errors_svm_6(i) = size(error_svm,1);
+    errors_mis_6(i) = size(error_mis,1);
+    if size(error_svm,1) < best_error_6
+        best_error_6 = size(error_svm,1);
+        best_model_6 = model_6;
+        best_lambda_6 = lambda;
     end
 end
-distances = ([data_5,ones(size(data_5,1),1)]*best_model).*labels_5;
-error_svm_labels = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<1);
-error_labels = labels_5(arrayfun(@(x) roundx(x,decimals,'round'),distances)<0);
+distances = ([data_6,ones(size(data_6,1),1)]*best_model_6).*labels_6;
+error_svm_labels = labels_6(arrayfun(@(x) roundx(x,decimals_6,'round'),distances)<1);
+error_labels = labels_6(arrayfun(@(x) roundx(x,decimals_6,'round'),distances)<0);
 
-plotSVM( data_5, labels_5, best_model, 'Weighted SVM with unbalanced data' );
+plotSVM( data_6, labels_6, best_model_6, 'Weighted SVM with unbalanced data' );
+
+
+%% Weighted error
+% Block 5
+distances_5 = ([data_5,ones(size(data_5,1),1)]*best_model_block_5).*labels_5;
+
+list_svm_errors_5 = labels_5(distances_5<1);
+error_svm_5 = size(list_svm_errors_5,1)/size(data_5,1);
+
+list_misclassified_5 = labels_5(distances_5<0);
+error_misclassified_5 = size(list_misclassified_5,1)/size(data_5,1);
+
+weighted_error_5 = sum((list_svm_errors_5==1)*w1+(list_svm_errors_5==-1)*w2);
+weighted_error_5 = weighted_error_5 / sum((labels_5==1)*w1+(labels_5==-1)*w2);
+
+error_svm_5
+error_misclassified_5
+weighted_error_5
+
+
+distances_6 = ([data_6,ones(size(data_6,1),1)]*best_model_6).*labels_6;
+list_svm_errors_6 = labels_6(distances_6 < 1);
+error_svm_6 = size(list_svm_errors_6,1)/size(data_6,1);
+
+list_misclassified_6 = labels_6(distances_6<0);
+error_misclassified_6 = size(list_misclassified_6,1)/size(data_6,1);
+
+weighted_error_6 = sum((list_svm_errors_6==1)*w1+(list_svm_errors_6==-1)*w2);
+weighted_error_6 = weighted_error_6 / sum((labels_6==1)*w1+(labels_6==-1)*w2);
+
+error_svm_6
+error_misclassified_6
+weighted_error_6
