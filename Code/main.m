@@ -100,6 +100,9 @@ suports = data(suport_indexes,:)
 
 
 %% QUESTION 4
+clear all;
+close all;
+clc;
 Dataset = load('../Data/example_dataset_2');
 labels = Dataset.labels;
 data = Dataset.data';
