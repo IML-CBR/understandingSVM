@@ -3,7 +3,7 @@ function [  model, v ] = train_dualSVM( labels, data, lambda )
 % function, with the dual algorithm solution
     m = size(data,1);
     n = size(data,2);
-    X = [data]';
+    X = data';
     Y = labels;
     K = X'*X;
     tolerance = 1e-4;
@@ -17,18 +17,18 @@ function [  model, v ] = train_dualSVM( labels, data, lambda )
     cvx_end
     
 % Fix v values
-    finish = 0;
-    decimals = 0;
-    while (decimals < 6) && ~finish %&& (lambda/10^decimals > mean(v)/100)
-        finish = (size(Y,1) - (sum(v <= lambda/10^decimals)+sum((arrayfun(@(x) roundx(x,decimals,'round'),v) == lambda))) == 3);
-        if ~finish decimals = decimals+1; end
-    end
-    
-    v(find(v <= lambda/10^(decimals))) = 0;
-    v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
+%     finish = 0;
+%     decimals = 0;
+%     while (decimals < 6) && ~finish %&& (lambda/10^decimals > mean(v)/100)
+%         finish = (size(Y,1) - (sum(v <= lambda/10^decimals)+sum((arrayfun(@(x) roundx(x,decimals,'round'),v) == lambda))) == 3);
+%         if ~finish decimals = decimals+1; end
+%     end
+%     
+%     v(find(v <= lambda/10^(decimals))) = 0;
+%     v(find((arrayfun(@(x) roundx(x,decimals,'round'),v)) == lambda)) = lambda;
 %
 % Recover w from the dual
-    w = (v'.*Y'*X')';
+%     w = (v'.*Y'*X')';
    
     
     model.margin = find(v > tolerance * lambda & v < (1 - tolerance) * lambda) ;
