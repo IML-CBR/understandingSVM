@@ -100,6 +100,7 @@ suports = data(suport_indexes,:)
 
 
 %% QUESTION 4
+% 1)
 Dataset = load('../Data/example_dataset_2');
 labels = Dataset.labels;
 data = Dataset.data';
@@ -237,7 +238,7 @@ error_svm_5
 error_misclassified_5
 weighted_error_5
 
-
+% Block 6
 distances_6 = ([data_6,ones(size(data_6,1),1)]*best_model_6).*labels_6;
 list_svm_errors_6 = labels_6(distances_6 < 1);
 error_svm_6 = size(list_svm_errors_6,1)/size(data_6,1);
