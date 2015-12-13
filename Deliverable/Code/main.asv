@@ -133,17 +133,15 @@ tolerance = 1e-4; % we need a threshold in order to ignore residual values
 
 % v values for lambda = 10
 v
-
 % indexes of the vi of the SVs:
-indexSVs = find(v > tolerance * lambda) % we use lambda as part of the threshold 
+indexSVs = find(v > tolerance * lambda); % we use lambda as part of the threshold 
     % in orther to relate tolerance to the v values magnitude, because all 
     % v values will allways be within the range 0 <= v <= lambda
     
 % vi of the SVs:
-vSVs = v(find(v > tolerance * lambda))
-
+vSVs = v(find(v > tolerance * lambda));
 % SVs:
-SVs = data(find(v > tolerance * lambda),:)
+data(find(v > tolerance * lambda),:)
 
 
 %% QUESTION 5
