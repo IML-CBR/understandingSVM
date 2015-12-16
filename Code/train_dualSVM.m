@@ -38,8 +38,8 @@ function [  model, v ] = train_dualSVM( labels, data, lambda )
 
 if ~ isempty(model.margin)
   % This works almost all times
-  model.b = 1-mean(Y(model.margin)'.*(Y(model.margin)' - model.vy' * K(:,model.margin))) ;
-
+  model.b = 1-mean(Y(model.margin)'.*(Y(model.margin)' - model.vy' * K(:,model.margin))) ; %model.m in reality
+%     model.b = mean((Y(model.svs)' - model.vy' * K(:,model.svs))) ; %this are the real calculations for model.b
 else
   % Special cases to deal with the case in which C is very small
   % and there are no support vectors on the margin
